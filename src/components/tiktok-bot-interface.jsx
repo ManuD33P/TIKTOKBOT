@@ -80,7 +80,7 @@ export default function Component() {
 
  useEffect(()=>{
         if(!socket?._socket){
-            socket?.connect('ws://186.137.241.231:3000');
+            socket?.connect('https://tiktokbot-server.onrender.com');
 
             socket._socket.on('newComment',(audio) =>{
                
