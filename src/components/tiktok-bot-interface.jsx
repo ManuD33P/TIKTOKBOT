@@ -103,6 +103,11 @@ export default function Component() {
             socket._socket.on("disconnect", () => {
                 handleDisconnect()
             });
+
+            socket._socket.on('PONG', ()=> console.log('Recibio un PONG'));
+            setInterval(()=> socket.emit('PING'),5000)
+
+
         }
 
       
