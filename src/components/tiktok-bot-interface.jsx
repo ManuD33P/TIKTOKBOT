@@ -36,7 +36,7 @@ export default function Component() {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
-    socket._socket.emit('setPreferents',preferents);
+    socket._socket.emit('setPreferents',(preferents,username));
   }
   const handleDisconnect = () => {
     setIsConnected(false)
