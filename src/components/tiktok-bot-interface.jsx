@@ -198,14 +198,18 @@ export default function Component() {
                 </Button>
 
                 <Dialog 
-                  className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                  
                 >
-                    <DialogTrigger>
+                    <DialogTrigger
+                    className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                    >
                       Settings
                     </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Settings</DialogTitle>
+                      <DialogTitle
+                      
+                      >Settings</DialogTitle>
                       <DialogDescription>edit settings</DialogDescription>
                     </DialogHeader>
                     <form>
