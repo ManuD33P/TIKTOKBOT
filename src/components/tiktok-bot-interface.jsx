@@ -24,10 +24,8 @@ export default function Component() {
   const [urlMusic, setUrlMusic] = useState('');
   const audioRef = useRef(null)
 
-  const onChangePreferents = (e) => {
-    console.log(e);
-    // const key = e.target
-    // setPreferents({...preferents, [key]: });
+  const onChangePreferents = ({key,value}) => {
+    setPreferents({...preferents, [key]: value });
   }
   const handleConnect = async () => {
     if (!username.trim()) return
@@ -37,8 +35,8 @@ export default function Component() {
     
   }
   const handleSubmit = (event) => {
-    console.log(event);
     event.preventDefault();
+    socket._socket.emit('setPreferents',preferents);
   }
   const handleDisconnect = () => {
     setIsConnected(false)
@@ -227,19 +225,30 @@ export default function Component() {
                           <Checkbox 
                             id="follow"
                             defaultChecked
-                            onCheckedChange= {(e)=> onChangePreferents(e) }
+                            onCheckedChange= {(e)=> onChangePreferents({
+                              key:"follow",
+                              value:e
+                            }) }
                           />
                            Agradecer cuando te siguen.</Label>
                         <Label>
                           <Checkbox 
                             id="like"
                             defaultChecked
+                            onCheckedChange= {(e)=> onChangePreferents({
+                              key:"like",
+                              value:e
+                            }) }
                           />
                            Agradecer cuando te dan me gusta.</Label>
                         <Label>
                           <Checkbox 
                             id="shared"
                             defaultChecked
+                            onCheckedChange= {(e)=> onChangePreferents({
+                              key:"shared",
+                              value:e
+                            }) }
                           />
                            Agradecer cuando comparten la transmisión en vivo.</Label>
                         <Button type="submit">
