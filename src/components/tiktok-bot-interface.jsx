@@ -212,7 +212,7 @@ export default function Component() {
                       <DialogTitle>Settings</DialogTitle>
                       <DialogDescription>Edit Settings</DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleSubmit}>
+                    <form className='grid gap-y-7' onSubmit={handleSubmit}>
                         <Label>
                           <Checkbox 
                             id="follow"
