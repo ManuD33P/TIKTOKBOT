@@ -28,7 +28,7 @@ export default function Component() {
   }
   const handleSubmit = (event) => {
     console.log(event);
-
+    
   }
   const handleDisconnect = () => {
     setIsConnected(false)
@@ -212,7 +212,7 @@ export default function Component() {
                       <DialogTitle>Settings</DialogTitle>
                       <DialogDescription>Edit Settings</DialogDescription>
                     </DialogHeader>
-                    <form className='grid gap-y-7' onSubmit={handleSubmit}>
+                    <form className='grid gap-y-3' onSubmit={handleSubmit}>
                         <Label>
                           <Checkbox 
                             id="follow"
@@ -231,7 +231,12 @@ export default function Component() {
                             defaultChecked
                           />
                            Agradecer cuando comparten la transmisión en vivo.</Label>
-                        
+                        <Button type="submit">
+                          Guardar Cambios
+                        </Button>
+                        <DialogClose>
+                          Cerrar ventana
+                        </DialogClose>
                     </form>
                   </DialogContent>
                 </Dialog>
