@@ -16,9 +16,19 @@ export default function Component() {
   const [listAudio, setlistAudio ] = useState([]);
   const [isConnected, setIsConnected] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
+  const [preferents, setPreferents] = useState({
+    follow:true,
+    shared:true,
+    like:true
+  })
   const [urlMusic, setUrlMusic] = useState('');
   const audioRef = useRef(null)
 
+  const onChangePreferents = (e) => {
+    console.log(e.target);
+    const key = e.target
+    setPreferents({...preferents, [key]: e.target.value });
+  }
   const handleConnect = async () => {
     if (!username.trim()) return
 
