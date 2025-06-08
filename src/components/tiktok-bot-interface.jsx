@@ -227,6 +227,7 @@ export default function Component() {
                           <Checkbox 
                             id="follow"
                             defaultChecked
+                            onCheckedChange= {(e)=> onChangePreferents(e) }
                           />
                            Agradecer cuando te siguen.</Label>
                         <Label>
