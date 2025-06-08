@@ -25,9 +25,9 @@ export default function Component() {
   const audioRef = useRef(null)
 
   const onChangePreferents = (e) => {
-    console.log(e.target);
-    const key = e.target
-    setPreferents({...preferents, [key]: e.target.value });
+    console.log(e);
+    // const key = e.target
+    // setPreferents({...preferents, [key]: });
   }
   const handleConnect = async () => {
     if (!username.trim()) return
