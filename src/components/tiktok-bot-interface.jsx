@@ -8,8 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,DialogHeader,DialogTitle,DialogFooter } from "@/components/ui/dialog"
 import { Bot, Music, User, Wifi, WifiOff } from "lucide-react"
-
-
+import { Checkbox } from "@/components/ui/checkbox";
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
 export default function Component() {
@@ -27,7 +26,10 @@ export default function Component() {
     socket.setUserName(username)
     
   }
+  const handleSubmit = (event) => {
+    console.log(event);
 
+  }
   const handleDisconnect = () => {
     setIsConnected(false)
     setIsConnecting(false);
@@ -207,13 +209,25 @@ export default function Component() {
                     </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle
-                      
-                      >Settings</DialogTitle>
-                      <DialogDescription>edit settings</DialogDescription>
+                      <DialogTitle>Settings</DialogTitle>
+                      <DialogDescription>Edit Settings</DialogDescription>
                     </DialogHeader>
-                    <form>
-                        
+                    <form onSubmit={handleSubmit}>
+                          <Checkbox 
+                            id="follow"
+                            defaultChecked
+                          />
+                          <Label> Agradecer cuando te siguen.</Label>
+                          <Checkbox 
+                            id="like"
+                            defaultChecked
+                          />
+                          <Label> Agradecer cuando te dan me gusta.</Label>
+                          <Checkbox 
+                            id="shared"
+                            defaultChecked
+                          />
+                          <Label> Agradecer cuando comparten la transmisión en vivo.</Label>
                     </form>
                   </DialogContent>
                 </Dialog>
