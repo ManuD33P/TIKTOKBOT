@@ -28,7 +28,7 @@ export default function Component() {
   }
   const handleSubmit = (event) => {
     console.log(event);
-    
+    event.preventDefault();
   }
   const handleDisconnect = () => {
     setIsConnected(false)
