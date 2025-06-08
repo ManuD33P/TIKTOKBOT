@@ -223,12 +223,13 @@ export default function Component() {
                             defaultChecked
                           />
                           <Label> Agradecer cuando te dan me gusta.</Label>
+                          <Label>
                           <Checkbox 
                             id="shared"
                             defaultChecked
-                          >
-                          <Label> Agradecer cuando comparten la transmisión en vivo.</Label>
-                          </Checkbox>
+                          />
+                           Agradecer cuando comparten la transmisión en vivo.</Label>
+                        
                     </form>
                   </DialogContent>
                 </Dialog>
