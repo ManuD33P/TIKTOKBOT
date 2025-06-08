@@ -213,17 +213,19 @@ export default function Component() {
                       <DialogDescription>Edit Settings</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleSubmit}>
+                        <Label>
                           <Checkbox 
                             id="follow"
                             defaultChecked
                           />
-                          <Label> Agradecer cuando te siguen.</Label>
+                           Agradecer cuando te siguen.</Label>
+                        <Label>
                           <Checkbox 
                             id="like"
                             defaultChecked
                           />
-                          <Label> Agradecer cuando te dan me gusta.</Label>
-                          <Label>
+                           Agradecer cuando te dan me gusta.</Label>
+                        <Label>
                           <Checkbox 
                             id="shared"
                             defaultChecked
