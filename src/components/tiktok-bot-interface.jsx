@@ -6,7 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,DialogHeader,DialogTitle,DialogFooter } from "@/components/ui/dialog"
 import { Bot, Music, User, Wifi, WifiOff } from "lucide-react"
+
+
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
 export default function Component() {
@@ -16,24 +19,11 @@ export default function Component() {
   const [isConnecting, setIsConnecting] = useState(false)
   const [urlMusic, setUrlMusic] = useState('');
   const audioRef = useRef(null)
-  const musicRef = useRef(null);
 
   const handleConnect = async () => {
     if (!username.trim()) return
 
     setIsConnecting(true)
-
-    // Simular conexión
-    // setTimeout(() => {
-    //   setIsConnected(true)
-    //   setIsConnecting(false)
-
-    //   // Reproducir audio de confirmación (invisible)
-    //   if (audioRef.current) {
-    //     audioRef.current.play().catch(console.error)
-    //   }
-    // }, 2000)
-
     socket.setUserName(username)
     
   }
@@ -206,6 +196,23 @@ export default function Component() {
                 >
                   Desconectar
                 </Button>
+
+                <Dialog 
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                >
+                    <DialogTrigger>
+                      Settings
+                    </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Settings</DialogTitle>
+                      <DialogDescription>edit settings</DialogDescription>
+                    </DialogHeader>
+                    <form>
+                        
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
           </div>
