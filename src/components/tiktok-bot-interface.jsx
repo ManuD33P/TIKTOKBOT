@@ -36,7 +36,7 @@ export default function Component() {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
-    socket._socket.emit('setPreferents',(preferents,username));
+    if(preferents)  socket._socket.emit('setPreferents',({...preferents},username));
   }
   const handleDisconnect = () => {
     setIsConnected(false)
@@ -224,7 +224,6 @@ export default function Component() {
                         <Label>
                           <Checkbox 
                             id="follow"
-                            defaultChecked
                             onCheckedChange= {(e)=> onChangePreferents({
                               key:"follow",
                               value:e
@@ -234,7 +233,6 @@ export default function Component() {
                         <Label>
                           <Checkbox 
                             id="like"
-                            defaultChecked
                             onCheckedChange= {(e)=> onChangePreferents({
                               key:"like",
                               value:e
@@ -244,14 +242,13 @@ export default function Component() {
                         <Label>
                           <Checkbox 
                             id="shared"
-                            defaultChecked
                             onCheckedChange= {(e)=> onChangePreferents({
                               key:"shared",
                               value:e
                             }) }
                           />
                            Agradecer cuando comparten la transmisión en vivo.</Label>
-                        <Button type="submit">
+                        <Button type="submit" onClick={()=> alert('Cambios Guardados.')}>
                           Guardar Cambios
                         </Button>
                         <DialogClose>
