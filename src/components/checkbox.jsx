@@ -2,11 +2,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect } from "react";
 
 
-export default (state,onChangePreferents,key) => {
+export default function CheckboxFunction(state,onChangePreferents,key){
 
     useEffect(()=>{},
-    [state])
     
+    [state])
+
     return (
         state ? 
         <Checkbox 
