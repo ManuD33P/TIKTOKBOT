@@ -8,9 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,DialogHeader,DialogTitle,DialogFooter } from "@/components/ui/dialog"
 import { Bot, Music, User, Wifi, WifiOff } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox";
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
+import Checkbox from "./checkbox"
 export default function Component() {
   const [username, setUsername] = useState("")
   const [listAudio, setlistAudio ] = useState([]);
@@ -222,15 +222,12 @@ export default function Component() {
                     </DialogHeader>
                     <form className='grid gap-y-3' onSubmit={handleSubmit}>
                         <Label>
-                          <Checkbox 
-                            id="follow"
-                            onCheckedChange= {(e)=> onChangePreferents({
-                              key:"follow",
-                              value:e
-                            }) }
-                          />
+                          {
+                            Checkbox(preferents.follow,onChangePreferents,"follow")
+                          }
                            Agradecer cuando te siguen.</Label>
                         <Label>
+                          
                           <Checkbox 
                             id="like"
                             onCheckedChange= {(e)=> onChangePreferents({
