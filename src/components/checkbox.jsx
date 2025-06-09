@@ -4,9 +4,7 @@ import { useEffect } from "react";
 
 export default function CheckboxFunction(state,onChangePreferents,key){
 
-    useEffect(()=>{},
     
-    [state])
 
     return (
         state ? 
