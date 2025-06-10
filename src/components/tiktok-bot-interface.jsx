@@ -66,7 +66,7 @@ export default function Component() {
 
   const handleVolumeChangeBot = (event) => {
       if(audioRef.current){
-          audioRef.current.volume((event.target.value / 100 ));
+          audioRef.current.volume = (event.target.value / 100 );
       }
   }
 
