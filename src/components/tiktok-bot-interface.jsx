@@ -66,7 +66,7 @@ export default function Component() {
 
   const handleVolumeChangeBot = (event) => {
       if(audioRef.current){
-          audioRef.current.value((event.target.value / 100 ));
+          audioRef.current.volume((event.target.value / 100 ));
       }
   }
 
@@ -275,7 +275,7 @@ export default function Component() {
           </div>
 
           {/* Controles de audio (visibles para demostración) */}
-          {isConnected && Array.isArray(listAudio) && listAudio.length && (
+          {isConnected && (
             <div className="space-y-2 pt-4 border-t">
               <Label className="flex items-center gap-2 text-sm">
                 <Music className="w-4 h-4" />
@@ -284,8 +284,11 @@ export default function Component() {
               <Label>
                 Volumen de voz
               </Label>
-              <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} />
+              <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} /> 
+          
 
+              {
+                Array.isArray(listAudio) && listAudio.length && (
               <div className="grid grid-cols-2 gap-2">
                 <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-1])} className="text-xs">
                   Último mensaje de chat.
@@ -300,6 +303,7 @@ export default function Component() {
                 </>
                 }
               </div>
+              )}
             </div>
           )}
         </CardContent>
