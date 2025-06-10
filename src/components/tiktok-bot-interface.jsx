@@ -10,7 +10,7 @@ import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,Dialog
 import { Bot, Music, User, Wifi, WifiOff, Play, Pause } from "lucide-react"
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
-import {check} from "./checkbox"
+import Checkbox from "./checkbox"
 export default function Component() {
   const [username, setUsername] = useState("")
   const [listAudio, setlistAudio ] = useState([]);
