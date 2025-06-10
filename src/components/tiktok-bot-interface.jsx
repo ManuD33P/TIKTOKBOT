@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,DialogHeader,DialogTitle,DialogFooter } from "@/components/ui/dialog"
-import { Bot, Music, User, Wifi, WifiOff } from "lucide-react"
+import { Bot, Music, User, Wifi, WifiOff, Play, Pause } from "lucide-react"
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
 import Checkbox from "./checkbox"
@@ -62,19 +62,27 @@ export default function Component() {
       }
   };
 
-  const handlePlayAndPauseChange = () => {
+  const handlePauseChange = () => {
       if (playerRef.current){
            playerRef.current.pauseVideo()
       }
   }
 
+  const handlePlayChange = () => {
+    if(playerRef.current){
+        playerRef.current.playVideo();
+    }
+  }
   const playMusic = (id) => {
 
     return (
       <div>
           <Youtu ref={playerRef} id={id} />
           <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
-          <Button onClick={handlePlayAndPauseChange}>Pausar Video</Button>
+          <div className="flex gap-3">
+          <Pause onClick={handlePauseChange} />
+          <Play onClick={handlePlayChange} />
+          </div>
       </div>
   );
 }
