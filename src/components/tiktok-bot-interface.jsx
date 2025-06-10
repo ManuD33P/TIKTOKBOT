@@ -88,7 +88,6 @@ export default function Component() {
     return (
       <div>
           <Youtu ref={playerRef} id={id} />
-          <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
           <div className="flex gap-3">
           <Pause onClick={handlePauseChange} />
           <Play onClick={handlePlayChange} />
@@ -281,12 +280,20 @@ export default function Component() {
                 <Music className="w-4 h-4" />
                 Controles de Audio
               </Label>
-              <Label>
-                Volumen de voz
-              </Label>
-              <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} /> 
-          
-
+              <div className="flex gap-3">
+                <div className="grid gap-2">
+                <Label>
+                  Volumen de voz
+                </Label>
+                <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} /> 
+                </div>
+                <div className="grid gap-2">
+                <Label>
+                  Volumen de Música
+                </Label>
+                <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
+                </div>
+              </div>
               {
                 Array.isArray(listAudio) && listAudio.length && (
               <div className="grid grid-cols-2 gap-2">
