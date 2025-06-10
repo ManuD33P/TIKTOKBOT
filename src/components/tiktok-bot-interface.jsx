@@ -66,7 +66,7 @@ export default function Component() {
 
   const handleVolumeChangeBot = (event) => {
       if(audioRef.current){
-          audioRef.current.setVolume(event.target.value);
+          audioRef.current.value((event.target.value / 100 ));
       }
   }
 
@@ -285,7 +285,7 @@ export default function Component() {
                 Volumen de voz
               </Label>
               <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} />
-              
+
               <div className="grid grid-cols-2 gap-2">
                 <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-1])} className="text-xs">
                   Último mensaje de chat.
