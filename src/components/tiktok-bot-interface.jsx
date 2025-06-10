@@ -62,13 +62,19 @@ export default function Component() {
       }
   };
 
+  const handlePlayAndPauseChange = () => {
+      if (playerRef.current){
+           playerRef.current.pauseVideo()
+      }
+  }
+
   const playMusic = (id) => {
 
     return (
       <div>
           <Youtu ref={playerRef} id={id} />
           <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
-
+          <Button onClick={handlePlayAndPauseChange}>Pausar Video</Button>
       </div>
   );
 }
