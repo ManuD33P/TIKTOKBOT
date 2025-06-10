@@ -296,21 +296,20 @@ export default function Component() {
               </div>
               {
                 Array.isArray(listAudio) && listAudio.length && (
-              <div className="grid grid-cols-2 gap-2">
-                <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-1])} className="text-xs">
-                  Último mensaje de chat.
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-1])} className="text-xs">
+                   Último mensaje de chat.
+                  </Button>
                 {
                  listAudio.length > 1 ?  
                 <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-2])} className="text-xs">
                   Ante último mensaje de chat.
                 </Button> : 
-                <>
-
-                </>
+                <></>
                 }
-              </div>
-              )}
+                </div>
+              ) || <p>No hay Mensajes</p>
+             }
             </div>
           )}
         </CardContent>
