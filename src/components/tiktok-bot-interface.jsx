@@ -64,11 +64,19 @@ export default function Component() {
       }
   };
 
+  const handleVolumeChangeBot = (event) => {
+      if(audioRef.current){
+          audioRef.current.setVolume(event.target.value);
+      }
+  }
+
   const handlePauseChange = () => {
       if (playerRef.current){
            playerRef.current.pauseVideo()
       }
   }
+
+  
 
   const handlePlayChange = () => {
     if(playerRef.current){
@@ -239,26 +247,20 @@ export default function Component() {
                             Checkbox(preferents.follow,onChangePreferents,"follow")
                           }
                            Agradecer cuando te siguen.</Label>
-                           
-                       {/* <Label>
+                        <Label>
                           
-                           <Checkbox 
-                            id="like"
-                            onCheckedChange= {(e)=> onChangePreferents({
-                              key:"like",
-                              value:e
-                            }) }
-                          />
+                          {
+                            Checkbox(preferents.like,onChangePreferents,"like")
+                          }
                            Agradecer cuando te dan me gusta.</Label>
                         <Label>
-                          <Checkbox 
-                            id="shared"
-                            onCheckedChange= {(e)=> onChangePreferents({
-                              key:"shared",
-                              value:e
-                            }) }
-                          />
-                           Agradecer cuando comparten la transmisión en vivo.</Label> */}
+                          {
+                            Checkbox(preferents.shared,onChangePreferents,"shared")
+                          }
+                           Agradecer cuando comparten la transmisión en vivo.
+                        </Label>
+
+                        
                         <Button type="submit" onClick={()=> alert('Cambios Guardados.')}>
                           Guardar Cambios
                         </Button>
@@ -279,6 +281,11 @@ export default function Component() {
                 <Music className="w-4 h-4" />
                 Controles de Audio
               </Label>
+              <Label>
+                Volumen de voz
+              </Label>
+              <input type="range" min="0" max="100" step="1" onChange={handleVolumeChangeBot} />
+              
               <div className="grid grid-cols-2 gap-2">
                 <Button size="sm" variant="outline" onClick={() => playAudio(listAudio[listAudio.length-1])} className="text-xs">
                   Último mensaje de chat.
