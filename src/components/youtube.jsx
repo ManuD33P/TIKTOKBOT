@@ -1,25 +1,17 @@
 // js
-import React from 'react';
+import React, { forwardRef } from 'react';
 import YouTube from 'react-youtube';
 
-function Youtu(id) {
-
- 
+const Youtu = forwardRef(({ id }, ref) => {
     const opts = {
-      height: '300.011111111111',
-      width: '200.01111111111111111',
-      playerVars: {
-        // https://developers.google.com/youtube/player_parameters
-        autoplay: 1,
-      },
-    }
-    return (
-        <YouTube videoId={id} opts={opts}  />
-    )
-  }
+        height: '300',
+        width: '200',
+        playerVars: {
+            autoplay: 1,
+        },
+    };
 
+    return <YouTube videoId={id} opts={opts} onReady={(event) => ref.current = event.target} />;
+});
 
-
-
-
-export default Youtu
+export default Youtu;

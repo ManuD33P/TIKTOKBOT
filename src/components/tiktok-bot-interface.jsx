@@ -23,6 +23,7 @@ export default function Component() {
   })
   const [urlMusic, setUrlMusic] = useState('');
   const audioRef = useRef(null)
+  const playerRef = useRef(null);
 
   const onChangePreferents = ({key,value}) => {
     setPreferents({...preferents, [key]: value });
@@ -55,26 +56,21 @@ export default function Component() {
     }
   };
 
+  const handleVolumeChange = (event) => {
+      if (playerRef.current) {
+          playerRef.current.setVolume(event.target.value);
+      }
+  };
+
   const playMusic = (id) => {
-    const opts = {
-      height: '390',
-      width: '640',
-      playerVars: {
-        // https://developers.google.com/youtube/player_parameters
-        autoplay: 1,
-      },
-    };
 
     return (
-      <>
-      {
-        Youtu(id)
-      } 
-      </>
-
-    )
-
-  }
+      <div>
+          <Youtu ref={playerRef} id={id} />
+          <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
+      </div>
+  );
+}
 
 
 
