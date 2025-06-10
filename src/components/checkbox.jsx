@@ -11,7 +11,7 @@ export default function CheckboxFunction(state,onChangePreferents,key){
                             id={key}
                             defaultChecked
                             onCheckedChange= {(e)=> onChangePreferents({
-                              key:{key},
+                              key,
                               value:e
                             }) }
         />
