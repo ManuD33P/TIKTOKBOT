@@ -26,6 +26,8 @@ export default function Component() {
   const playerRef = useRef(null);
 
   const onChangePreferents = ({key,value}) => {
+    console.log('dentro de la funcion esto es key', key)
+    console.log('esto es value dentro de la funcion', value)
     setPreferents({...preferents, [key]: value });
   }
   const handleConnect = async () => {
@@ -237,9 +239,10 @@ export default function Component() {
                             Checkbox(preferents.follow,onChangePreferents,"follow")
                           }
                            Agradecer cuando te siguen.</Label>
-                        <Label>
+                           
+                       {/* <Label>
                           
-                          <Checkbox 
+                           <Checkbox 
                             id="like"
                             onCheckedChange= {(e)=> onChangePreferents({
                               key:"like",
@@ -255,7 +258,7 @@ export default function Component() {
                               value:e
                             }) }
                           />
-                           Agradecer cuando comparten la transmisión en vivo.</Label>
+                           Agradecer cuando comparten la transmisión en vivo.</Label> */}
                         <Button type="submit" onClick={()=> alert('Cambios Guardados.')}>
                           Guardar Cambios
                         </Button>
