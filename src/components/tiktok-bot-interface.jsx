@@ -93,10 +93,6 @@ export default function Component() {
     return (
       <div>
           <Youtu ref={playerRef} id={id} />
-          <div className="flex gap-3">
-          <Pause onClick={handlePauseChange} />
-          <Play onClick={handlePlayChange} />
-          </div>
       </div>
   );
 }
@@ -296,7 +292,11 @@ export default function Component() {
                 <Label>
                   Volumen de Música
                 </Label>
+                <div className="flex gap-1.5">
                 <input type="range" min="0" max="100" step="1" onChange={handleVolumeChange} />
+                <Pause onClick={handlePauseChange} />
+                <Play onClick={handlePlayChange} />
+                </div>
                 </div>
               </div>
               {
