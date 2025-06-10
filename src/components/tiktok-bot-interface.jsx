@@ -25,13 +25,13 @@ export default function Component() {
   const audioRef = useRef(null)
   const playerRef = useRef(null);
 
-  const onChangePreferents = ({key,value}) => {
-    console.log('dentro de la funcion esto es key', key)
+  const onChangePreferents = ({prop,value}) => {
+    console.log('dentro de la funcion esto es key', prop)
     console.log('esto es value dentro de la funcion', value)
     setPreferents((prev) => {
       return {
         ...prev,
-        [key.key]: value
+        [prop]: value
       }
     });
   }

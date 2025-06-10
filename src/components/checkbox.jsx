@@ -3,21 +3,22 @@ import { useCallback } from "react";
 
 
 export default function CheckboxFunction(state,onChangePreferents,key){
+  const prop = key;
     return (
         state ? 
         <Checkbox 
-                            id={key}
+                            id={prop}
                             defaultChecked
                             onCheckedChange= {(e)=> onChangePreferents({
-                              key,
+                              prop,
                               value:e
                             }) }
         />
         :
         <Checkbox 
-        id={key}
+        id={prop}
         onCheckedChange= {(e)=> onChangePreferents({
-          key:{key},
+          key:{prop},
           value:e
         }) }
 />
