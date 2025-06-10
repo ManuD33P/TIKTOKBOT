@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { useEffect } from "react";
+import { useCallback } from "react";
 
 
 export default function CheckboxFunction(state,onChangePreferents,key){

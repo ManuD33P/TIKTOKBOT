@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect,useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,7 +10,7 @@ import { Dialog,DialogTrigger,DialogClose,DialogContent,DialogDescription,Dialog
 import { Bot, Music, User, Wifi, WifiOff, Play, Pause } from "lucide-react"
 import socket from '@/lib/socketio'
 import Youtu from "./youtube"
-import Checkbox from "./checkbox"
+import {check} from "./checkbox"
 export default function Component() {
   const [username, setUsername] = useState("")
   const [listAudio, setlistAudio ] = useState([]);
@@ -28,7 +28,12 @@ export default function Component() {
   const onChangePreferents = ({key,value}) => {
     console.log('dentro de la funcion esto es key', key)
     console.log('esto es value dentro de la funcion', value)
-    setPreferents({...preferents, [key]: value });
+    setPreferents((prev) => {
+      return {
+        ...prev,
+        [key.key]: value
+      }
+    });
   }
   const handleConnect = async () => {
     if (!username.trim()) return
@@ -39,7 +44,7 @@ export default function Component() {
   }
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(preferents)  socket._socket.emit('setPreferents',({...preferents,username:username}));
+    if(preferents)  socket._socket.emit('setPreferents',({...preferents,username}));
   }
   const handleDisconnect = () => {
     setIsConnected(false)
