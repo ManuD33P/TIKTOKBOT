@@ -280,7 +280,7 @@ export default function Component() {
                 <Music className="w-4 h-4" />
                 Controles de Audio
               </Label>
-              <div className="flex gap-3">
+              <div className="flex gap-1.5 justify-center content-center">
                 <div className="grid gap-2">
                 <Label>
                   Volumen de voz
