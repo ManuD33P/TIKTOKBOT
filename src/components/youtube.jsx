@@ -12,7 +12,7 @@ const Youtu = forwardRef(({ id }, ref) => {
         display:'block',
     };
 
-    return <YouTube videoId={id} opts={opts} onReady={(event) => ref.current = event.target} />;
+    return <YouTube style={{display:'block'}}videoId={id} opts={opts} onReady={(event) => ref.current = event.target} />;
 });
 
 export default Youtu;
