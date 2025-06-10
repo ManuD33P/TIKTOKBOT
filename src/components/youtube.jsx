@@ -9,6 +9,7 @@ const Youtu = forwardRef(({ id }, ref) => {
         playerVars: {
             autoplay: 1,
         },
+        display:'block',
     };
 
     return <YouTube videoId={id} opts={opts} onReady={(event) => ref.current = event.target} />;
