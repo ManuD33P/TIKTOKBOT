@@ -26,8 +26,6 @@ export default function Component() {
   const playerRef = useRef(null);
 
   const onChangePreferents = ({prop,value}) => {
-    console.log('dentro de la funcion esto es key', prop)
-    console.log('esto es value dentro de la funcion', value)
     setPreferents((prev) => {
       return {
         ...prev,
@@ -49,13 +47,12 @@ export default function Component() {
   const handleDisconnect = () => {
     setIsConnected(false)
     setIsConnecting(false);
-    setUsername("")
+    handleConnect()
   }
 
   const playAudio = async (audioUrl) => {
     try {
       const ref = audioRef.current;
-      console.log('este es el urlAudio: ', audioUrl)
       ref.src = audioUrl
       await ref.play()
     } catch (error) {
@@ -123,6 +120,7 @@ export default function Component() {
             })
             socket._socket.on("disconnect", () => {
                 handleDisconnect()
+                
             });
 
             socket._socket.on('PONG', ()=> console.log('Recibio un PONG'));
