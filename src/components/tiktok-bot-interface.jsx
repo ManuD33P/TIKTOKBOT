@@ -95,44 +95,124 @@ export default function Component() {
 
 
 
- useEffect(()=>{
-        if(!socket?._socket){
-            socket?.connect('https://tiktokbot-server.onrender.com');
+useEffect(() => {
+  // Verifica si el objeto socket existe y si la instancia interna _socket no ha sido creada aún
+  // Usamos socket?._socket para seguir la estructura de tu código original
+  if (socket && !socket._socket) {
+      console.log('Attempting to connect socket...');
+      // Conecta el socket a la URL del servidor
+      socket.connect('https://tiktokbot-server.onrender.com');
 
-            socket._socket.on('newComment',(audio) =>{
-               
-                 playAudio(audio.source);
-                 setlistAudio((list) => [...list, audio.source]);
-               
-            })
+      // Una vez que socket.connect() es llamado, la instancia real del socket
+      // debería estar disponible en socket._socket.
+      // Añadimos los listeners a esta instancia.
+      // Nota: Acceder a _socket es una implementación interna y podría cambiar.
+      // Una forma más estándar sería usar socket.on(...) directamente si el objeto
+      // 'socket' que pasas es la instancia del cliente de Socket.IO.
+      // Asumiendo tu estructura actual:
+      const currentSocket = socket._socket;
 
-            socket._socket.on('tiktokConected',()=>{
-                setIsConnected(true);
-            })
+      if (currentSocket) {
+          console.log('Socket instance found, adding listeners...');
 
-            socket._socket.on('tiktokDisconnect', ()=>{
-                setIsConnected(false);
-                handleConnect()
-            })
+          // Listeners existentes
+          currentSocket.on('newComment', (audio) => {
+              console.log('Received newComment');
+              playAudio(audio.source);
+              setlistAudio((list) => [...list, audio.source]);
+          });
 
-            socket._socket.on('newMusic', (url) => {
-                setUrlMusic(url);
-            })
-            socket._socket.on("disconnect", () => {
-                handleDisconnect()
-                handleConnect()
-            });
+          currentSocket.on('tiktokConected', () => {
+              console.log('Received tiktokConected');
+              setIsConnected(true);
+          });
 
-            socket._socket.on('PONG', ()=> console.log('Recibio un PONG'));
-            setInterval(()=> socket._socket.emit('PING'),5000)
+          currentSocket.on('tiktokDisconnect', () => {
+              console.log('Received tiktokDisconnect');
+              // setIsConnected(false);
+          });
+
+          currentSocket.on('newMusic', (url) => {
+              console.log('Received newMusic');
+              setUrlMusic(url);
+          });
+
+          currentSocket.on("disconnect", () => {
+              console.log('Received disconnect');
+              // handleDisconnect();
+              handleConnect(); 
+          });
+
+          currentSocket.on('PONG', () => console.log('Recibio un PONG'));
+
+          // *** Lógica para la reconexión ***
+          currentSocket.on('reconnect', () => {
+              console.log('Socket reconnected!');
+              // Verifica si existe un username en el estado local del componente
+              // Asumimos que 'username' es una variable de estado accesible aquí (ej. de useState)
+              if (username) {
+                  console.log(`Setting username on reconnect: ${username}`);
+                  // Llama al método setUserName en tu objeto socket
+                  socket.setUserName(username);
+              }
+          });
+          // *** Fin de la lógica de reconexión ***
 
 
-        }
+          // Intervalo PING
+          const pingInterval = setInterval(() => {
+               // Solo emite PING si la instancia interna del socket existe y está conectada
+               if (socket._socket && socket._socket.connected) {
+                   socket._socket.emit('PING');
+               }
+          }, 5000);
 
-      
+          // Función de limpieza para remover listeners e intervalo
+          return () => {
+              console.log('Cleaning up socket listeners and interval...');
+              // Verifica si la instancia interna del socket existe antes de remover listeners
+              if (socket && socket._socket) {
+                  const socketToClean = socket._socket;
+                  socketToClean.off('newComment');
+                  socketToClean.off('tiktokConected');
+                  socketToClean.off('tiktokDisconnect');
+                  socketToClean.off('newMusic');
+                  socketToClean.off('disconnect');
+                  socketToClean.off('PONG');
+                  socketToClean.off('reconnect'); // Limpia el nuevo listener
+              }
+              clearInterval(pingInterval);
+              // Opcional: Desconectar el socket al desmontar el componente.
+              // Esto depende de si la conexión debe persistir o no.
+              // Si el socket se gestiona globalmente (ej. en un Context), no desconectes aquí.
+              // Si este componente es responsable de su ciclo de vida, desconecta.
+              // socket?.disconnect(); // Usar con precaución
+          };
+      } else {
+           console.error('Socket instance (_socket) not available immediately after connect call.');
+           // Considera cómo manejar este caso si socket._socket no se popula de inmediato.
+           // Podría requerir un enfoque diferente para añadir listeners.
+      }
+  } else if (socket && socket._socket) {
+      console.log('Socket object exists and internal _socket instance is already present.');
+      // Si el socket ya está conectado cuando el efecto se ejecuta,
+      // asegúrate de que los listeners (incluido 'reconnect') se añadan
+      // en la lógica que maneja la conexión inicial fuera de este efecto,
+      // o añádelos aquí también si es necesario.
+  } else {
+       console.log('Socket object is null or undefined.');
+  }
+
+  // Dependencias del efecto:
+  // Incluye 'socket', 'username' y todas las funciones/setters de estado usados dentro.
+  // Asegúrate de que 'username' esté en las dependencias para que el efecto
+  // se re-ejecute si 'username' cambia (aunque el listener 'reconnect' usará
+  // el valor de 'username' del momento en que se añadió el listener, a menos que
+  // uses una referencia o useCallback/useMemo para las funciones del listener).
+  // Para este caso simple, incluir 'username' como dependencia es suficiente.
+}, [socket, username, playAudio, setlistAudio, setIsConnected, handleConnect, handleDisconnect, setUrlMusic]); // Asegúrate de incluir todas las dependencias relevantes
 
 
- },[])
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 p-4 flex gap-10 items-center justify-center">
       <Card className="w-full max-w-md shadow-lg">
