@@ -47,7 +47,6 @@ export default function Component() {
   const handleDisconnect = () => {
     setIsConnected(false)
     setIsConnecting(false);
-    handleConnect()
   }
 
   const playAudio = async (audioUrl) => {
@@ -113,6 +112,7 @@ export default function Component() {
 
             socket._socket.on('tiktokDisconnect', ()=>{
                 setIsConnected(false);
+                handleConnect()
             })
 
             socket._socket.on('newMusic', (url) => {
@@ -120,7 +120,7 @@ export default function Component() {
             })
             socket._socket.on("disconnect", () => {
                 handleDisconnect()
-                
+                handleConnect()
             });
 
             socket._socket.on('PONG', ()=> console.log('Recibio un PONG'));
