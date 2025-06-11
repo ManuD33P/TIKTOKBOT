@@ -154,6 +154,7 @@ useEffect(() => {
                   console.log(`Setting username on reconnect: ${username}`);
                   // Llama al método setUserName en tu objeto socket
                   socket.setUserName(username);
+                  setIsConnecting(true)
               }
           });
           // *** Fin de la lógica de reconexión ***
