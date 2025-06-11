@@ -2,118 +2,160 @@ import { io } from 'socket.io-client';
 
 class Socket {
     constructor() {
-        this.username = null; // Inicializar con null o undefined es más común
-        this.conected = false; // Considera si esta propiedad es realmente necesaria si usas socket.connected
-        this._socket = null; // Inicializar con null
-
         // Implementación del patrón Singleton
         if (!Socket.instance) {
+            this._socket = null; // La instancia real de socket.io-client
+            this.username = null; // Para almacenar el username globalmente si es necesario
+            this.isConnected = false; // Para rastrear el estado de conexión
+
             Socket.instance = this;
         }
 
         return Socket.instance;
     }
 
-    connect(endpoint) {
+    // Método para inicializar y conectar el socket.
+    // Debería llamarse una vez al inicio de tu aplicación (ej. en el componente raíz o un Context).
+    initialize(endpoint) {
         if (!this._socket) {
-            console.log(`Connecting socket to ${endpoint}...`);
-            // Instanciar el socket con opciones de reconexión explícitas
+            console.log(`Socket: Inicializando y conectando a ${endpoint}...`);
             this._socket = io(endpoint, {
-                reconnection: true, // Habilitar reconexión automática (ya es el valor por defecto)
+                reconnection: true, // Habilitar reconexión automática
                 reconnectionAttempts: Infinity, // Intentar reconectar indefinidamente
                 reconnectionDelay: 1000, // Esperar 1 segundo antes del primer intento
-                reconnectionDelayMax: 5000, // El retraso máximo entre intentos será de 5 segundos
-                randomizationFactor: 0.5 // Factor de aleatorización para el retraso
+                reconnectionDelayMax: 5000, // Retraso máximo de 5 segundos
+                randomizationFactor: 0.5, // Factor de aleatorización
+                // transports: ['websocket'], // Opcional: forzar WebSockets
             });
 
-            // Listener para la conexión inicial o reconexiones exitosas
+            // Añadir listeners GLOBALES gestionados por el singleton
             this._socket.on('connect', () => {
-                console.log('Cliente conectado con el servidor');
-                this.conected = true; // Actualizar estado local si lo usas
-                // Aquí podrías emitir 'setUsername' si el username ya está disponible
-                // en la instancia de la clase Socket, en lugar de esperar al evento 'reconnect'
-                // en el componente. Depende de dónde se establece 'this.username'.
-                // if (this.username) {
-                //     this.setUserName(this.username);
-                // }
+                console.log('Socket: Cliente conectado con el servidor');
+                this.isConnected = true;
+                // Emitir username si ya está disponible en la instancia del singleton
+                if (this.username) {
+                     console.log(`Socket: Emitiendo setUsername en conexión inicial: ${this.username}`);
+                     this._socket.emit('setUsername', this.username);
+                }
             });
 
-            // Listener para la desconexión
-            this._socket.on("disconnect", (reason) => {
-                console.log(`Cliente desconectado. Razón: ${reason}`);
-                this.conected = false; // Actualizar estado local si lo usas
-
-                // *** SUGERENCIA: Eliminar o modificar esta lógica de reconexión manual ***
-                // Si 'reconnection: true' está configurado, Socket.IO intentará reconectar
-                // automáticamente. Llamar a this.connect(endpoint) aquí puede causar
-                // comportamiento inesperado o duplicado.
-                // La lógica para manejar la desconexión en el componente (ej. handleDisconnect)
-                // debería ser suficiente para actualizar la UI.
-                // La lógica para re-enviar el username debe ir en el evento 'reconnect'
-                // en el componente (como hicimos antes) o aquí en el evento 'connect'
-                // si el username está disponible en la instancia de la clase.
-
-                // if (socket.active) { // 'socket.active' no es una propiedad estándar del cliente io
-                //     this.connect(endpoint) // <-- Considera eliminar esta línea
-                // } else {
-                //   console.log(reason);
-                // }
-                // *** Fin de la SUGERENCIA ***
+            this._socket.on('disconnect', (reason) => {
+                console.log(`Socket: Cliente desconectado. Razón: ${reason}`);
+                this.isConnected = false;
+                // Socket.IO con reconnection: true intentará reconectar automáticamente
             });
 
-            // Listener para errores de conexión (útil para depuración)
+            this._socket.on('reconnect', (attemptNumber) => {
+                 console.log(`Socket: Cliente reconectado! Intento #${attemptNumber}`);
+                 this.isConnected = true;
+                 // Emitir username aquí en reconexión exitosa
+                 if (this.username) {
+                     console.log(`Socket: Emitiendo setUsername en reconexión: ${this.username}`);
+                     this._socket.emit('setUsername', this.username);
+                 }
+            });
+
             this._socket.on('connect_error', (error) => {
-                console.error('Error de conexión del socket:', error);
+                console.error('Socket: Error de conexión:', error);
+                this.isConnected = false;
             });
 
-            // Listener para errores de reconexión
-             this._socket.on('reconnect_error', (error) => {
-                console.error('Error de reconexión del socket:', error);
+            this._socket.on('reconnect_error', (error) => {
+                console.error('Socket: Error de reconexión:', error);
             });
 
-             // Listener cuando se inicia un intento de reconexión
-             this._socket.on('reconnecting', (attemptNumber) => {
-                console.log(`Intentando reconectar... Intento #${attemptNumber}`);
+            this._socket.on('reconnecting', (attemptNumber) => {
+                console.log(`Socket: Intentando reconectar... Intento #${attemptNumber}`);
             });
 
-             // Listener cuando se cancela la reconexión (ej. después de maxAttempts)
-             this._socket.on('reconnect_failed', () => {
-                console.error('Reconexión fallida después de varios intentos.');
+            this._socket.on('reconnect_failed', () => {
+                console.error('Socket: Reconexión fallida después de varios intentos.');
+                this.isConnected = false;
             });
+
+            // Listener global para PONG si es parte del heartbeat
+             this._socket.on('PONG', ()=> console.log('Socket: Recibio un PONG'));
+
+             // Gestionar el intervalo PING en el singleton si es a nivel de aplicación
+             // Si el servidor ya maneja heartbeats, este PING manual podría no ser necesario.
+             // Si lo mantienes, asegúrate de limpiarlo al desconectar/destruir el singleton.
+             this._pingInterval = setInterval(() => {
+                 if (this._socket && this._socket.connected) {
+                     // console.log('Socket: Emitting PING'); // Descomentar para ver los PINGs
+                     this._socket.emit('PING');
+                 }
+             }, 5000);
+
 
         } else {
-            console.log('Socket ya está instanciado.');
-            // Si el socket ya existe, puedes querer asegurarte de que esté conectado
-            // o manejar este caso según la lógica de tu aplicación.
+            console.log('Socket: Instancia ya inicializada.');
+            // Si ya existe, asegurar que esté conectado si no lo está
             if (!this._socket.connected) {
-                 console.log('Socket existente no conectado, intentando conectar...');
-                 this._socket.connect(); // Llama a connect() en la instancia existente
+                 console.log('Socket: Instancia existente no conectada, intentando conectar...');
+                 this._socket.connect(); // Llamar connect() en la instancia existente
             }
         }
     }
 
+    // Método para establecer el nombre de usuario y emitirlo
     setUserName(username) {
-        this.username = username; // Opcional: guardar el username en la instancia de la clase
+        this.username = username; // Almacenar en el singleton
         if (this._socket && this._socket.connected) {
-            console.log(`Emitiendo setUsername: ${username}`);
+            console.log(`Socket: Emitiendo setUsername: ${username}`);
             this._socket.emit('setUsername', username);
         } else {
-            console.warn('Socket no conectado, no se pudo emitir setUsername.');
-            // Podrías guardar el username y emitirlo una vez que se conecte/reconecte
-            // (ej. en el listener 'connect' o 'reconnect').
+            console.warn('Socket: No conectado, no se pudo emitir setUsername. Almacenando username para después.');
+            // Los listeners 'connect' o 'reconnect' lo emitirán cuando sea posible
         }
     }
 
-    // Método para obtener la instancia del socket si es necesario
+    // Método para emitir eventos personalizados desde los componentes
+    emit(event, data) {
+        if (this._socket && this._socket.connected) {
+            this._socket.emit(event, data);
+        } else {
+            console.warn(`Socket: No conectado, no se pudo emitir evento "${event}".`);
+        }
+    }
+
+    // Método para que los componentes añadan listeners específicos
+    on(event, listener) {
+        if (this._socket) {
+            this._socket.on(event, listener);
+        } else {
+            console.warn(`Socket: No inicializado, no se pudo añadir listener para "${event}".`);
+        }
+    }
+
+     // Método para que los componentes eliminen listeners específicos
+    off(event, listener) {
+        if (this._socket) {
+            this._socket.off(event, listener);
+        } else {
+            console.warn(`Socket: No inicializado, no se pudo eliminar listener para "${event}".`);
+        }
+    }
+
+    // Método para obtener la instancia real de socket.io-client
     getSocketInstance() {
         return this._socket;
     }
 
-    // Método para desconectar manualmente si es necesario
+    // Método para verificar el estado de conexión
+    isConnected() {
+        return this._socket ? this._socket.connected : false;
+    }
+
+    // Método para desconectar manualmente (si es necesario al cerrar la app, por ejemplo)
     disconnect() {
         if (this._socket && this._socket.connected) {
-            console.log('Desconectando socket manualmente...');
+            console.log('Socket: Desconectando manualmente...');
             this._socket.disconnect();
+        }
+        // Limpiar el intervalo PING si se gestiona aquí
+        if (this._pingInterval) {
+            clearInterval(this._pingInterval);
+            this._pingInterval = null;
         }
     }
 }
