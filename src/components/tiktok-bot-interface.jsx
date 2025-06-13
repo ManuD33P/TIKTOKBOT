@@ -223,7 +223,7 @@ export default function Component({user}) {
     // Este efecto adicional podría ser redundante si la lógica del singleton es correcta.
     
     useEffect(() => {
-        if (username && socket.isConnected() && !socket.username) { // Verifica si hay username local, socket conectado, y singleton no tiene username
+        if (username && socket?.isConnected() && !socket?.username) { // Verifica si hay username local, socket conectado, y singleton no tiene username
              console.log('Componente: Socket conectado y username disponible, emitiendo setUsername...');
              socket.setUserName(username); // Esto también actualiza socket.username en el singleton
              setIsConnecting(true); // Asumiendo que setUsername inicia el proceso de conexión a TikTok
