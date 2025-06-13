@@ -74,7 +74,7 @@ export default function Component({user}) {
     const preferentsVolume = () => {
         const ref  =  audioRef.current
         if(ref) {
-            ref.setVolume = 30;
+            ref.setVolume = 20;
         }
     }
     const handleSubmit = (event) => {
