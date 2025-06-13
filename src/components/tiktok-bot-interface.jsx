@@ -63,6 +63,7 @@ export default function Component({user}) {
             const ref = audioRef.current;
             if (ref) {
                 ref.src = audioUrl;
+                ref.volume = (60 / 100)
                 await ref.play();
             }
         } catch (error) {
@@ -70,6 +71,12 @@ export default function Component({user}) {
         }
     }, []); // No depende de nada local
 
+    const preferentsVolume = () => {
+        const ref  =  audioRef.current
+        if(ref) {
+            ref.setVolume = 30;
+        }
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
         if (preferents && socket.isConnected()) { // Verifica si el socket está conectado antes de emitir
@@ -109,6 +116,7 @@ export default function Component({user}) {
         return (
             <div>
                 <Youtu ref={playerRef} id={id} />
+            
             </div>
         );
     }
@@ -414,9 +422,9 @@ export default function Component({user}) {
 
             {/* Reproductor de audio invisible */}
             <audio ref={audioRef} style={{ display: "none" }} preload="none" />
-            {
-                urlMusic && playMusic(urlMusic)
-            }
+            { playMusic(urlMusic) }
+            { preferentsVolume() }
+            
         </div>
     )
 }
