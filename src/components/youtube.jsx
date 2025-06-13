@@ -11,7 +11,10 @@ const Youtu = forwardRef(({ id }, ref) => {
         },
     };
 
-    return <YouTube videoId={id} opts={opts} onReady={(event) => ref.current = event.target} />;
+    return <YouTube videoId={id} opts={opts} onReady={(event) => {
+        ref.current = event.target
+        ref.current.setVolume(15)
+    }} />;
 });
 
 
