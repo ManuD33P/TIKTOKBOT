@@ -12,8 +12,8 @@ import socket from '@/lib/socketio' // Asegúrate de que esta ruta sea correcta 
 import Youtu from "./youtube"
 import Checkbox from "./checkbox"
 
-export default function Component() {
-    const [username, setUsername] = useState("")
+export default function Component({user}) {
+    const [username, setUsername] = useState(user || "")
     const [listAudio, setlistAudio] = useState([]);
     const [isConnected, setIsConnected] = useState(false)
     const [isConnecting, setIsConnecting] = useState(false)
@@ -221,7 +221,7 @@ export default function Component() {
     // Si setUsername se llama *después* de la conexión inicial, la lógica en setUserName
     // de la clase Socket ya lo emite si está conectado.
     // Este efecto adicional podría ser redundante si la lógica del singleton es correcta.
-    /*
+    
     useEffect(() => {
         if (username && socket.isConnected() && !socket.username) { // Verifica si hay username local, socket conectado, y singleton no tiene username
              console.log('Componente: Socket conectado y username disponible, emitiendo setUsername...');
@@ -229,7 +229,7 @@ export default function Component() {
              setIsConnecting(true); // Asumiendo que setUsername inicia el proceso de conexión a TikTok
         }
     }, [username, setIsConnecting]); // Depende de username y setIsConnecting
-    */
+    
 
 
     return (
